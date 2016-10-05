@@ -61,12 +61,12 @@ print_r($connection_string);
     <script src="assets/js/vendor/chosen/chosen.jquery.min.js"></script>
 <script>
   $(function(){
-        //test_bi("linecompare");
-        //test_bi("pie");
+        test_bi("linecompare");
+        test_bi("pie");
 
         function test_bi(act){
-            console.log("//--------------------------------------------------");
             $.getJSON("bi/bi_action.php?act="+act,function(r){
+                console.log("//--------------------------------------------------");
                 console.log(r);
                 $("#content").html(r);
             }); 
