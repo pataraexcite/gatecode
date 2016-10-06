@@ -317,6 +317,55 @@ function getchartdata($sql){
 	return json_encode($arr,JSON_NUMERIC_CHECK);
 }
 
+if($_REQUEST['act']=="ratecode"){
+	
+	$sql="
+		SELECT  *, COUNT(*) AS num
+		FROM ratesetup
+		WHERE 1 GROUP BY rate_code
+		ORDER BY num DESC
+		LIMIT 7
+	";
+	$q=new dbMan(trim(text_get($connect_pms)));
+	$q->query($sql);
+	$arr = array();
+
+	$label = array();
+	$value = array();
+	foreach($q->fetch_array() as $r){
+		//$text .= '{label: "'.$r['rate_code'].'",value: '.$r['num'].'},';
+		$point = array("label"=>$r['rate_code'],"value"=>$r['num']);
+		array_push($arr,$point);
+
+		$point = array("label"=>$r['rate_code'],"value"=>$r['num']);
+		array_push($label,$r['rate_code']);
+		array_push($label,$r['rate_code']);
+		
+	}
+	$point2 = array("label"=>$label,"value"=>$value);
+
+	echo json_encode($arr);
+	exit();
+
+
+	$q=new dbMan(trim(text_get($connect_pms)));
+	$q->query($sql);
+	$arr1=array();
+	$arr2=array();
+	foreach($q->fetch_array() as $row){
+		$point=array("0"=>$row["m"],"1"=>strval($row[sumrev]));
+		array_push($arr1,$point);  
+		
+		$point=array("0"=>$row["m"],"1"=>strval($row[sumrev2]));
+		array_push($arr2,$point); 		  
+	}
+	$q->close();
+	
+	//echo '{"data":'.json_encode($arr,JSON_NUMERIC_CHECK).'}';
+	echo '{"data1":'.json_encode($connect_pms,JSON_NUMERIC_CHECK)."}";
+	//echo '{"data1":'.json_encode($arr1,JSON_NUMERIC_CHECK).',"data2":'.json_encode($arr2,JSON_NUMERIC_CHECK).'}';
+	exit();
+}
 if($_REQUEST['act']=="linecountry"){
 	$sql="
 		SELECT group_concat(DISTINCT ss.aa  ORDER BY ss.orderby ASC) aa, sum(s.act_today) sumrev,		       
@@ -532,7 +581,8 @@ if($_REQUEST['act']=="linecompare"){
 	$q->close();
 	
 	//echo '{"data":'.json_encode($arr,JSON_NUMERIC_CHECK).'}';
-	echo '{"data1":'.json_encode($arr1,JSON_NUMERIC_CHECK).',"data2":'.json_encode($arr2,JSON_NUMERIC_CHECK).'}';
+	echo '{"data1":'.json_encode($connect_pms,JSON_NUMERIC_CHECK)."}";
+	//echo '{"data1":'.json_encode($arr1,JSON_NUMERIC_CHECK).',"data2":'.json_encode($arr2,JSON_NUMERIC_CHECK).'}';
 	exit();
 }
 

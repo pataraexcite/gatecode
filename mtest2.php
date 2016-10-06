@@ -1,11 +1,11 @@
 <?php
 include("../config.php");
 include("../function.php");
-/*
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-*/
+
 echo "connecttion is ";
 print_r($connection_string);
 
@@ -61,17 +61,61 @@ print_r($connection_string);
     <script src="assets/js/vendor/chosen/chosen.jquery.min.js"></script>
 <script>
   $(function(){
-        test_bi("linecompare");
-        test_bi("pie");
+    //test_bi("linecompare");
+    test_bi("ratecode");
+    //test_bi("pie");
+    //$("body").load("bi/bi_action.php?act=ratecode");
+          
+          Morris.Donut({
+            element: 'browser-usage',
+            data: [
+              {label: "Chrome", value: 25},
+              {label: "Safari", value: 20},
+              {label: "Firefox", value: 15},
+              {label: "Opera", value: 5},
+              {label: "Internet Explorer", value: 10},
+              {label: "Other", value: 25}
+            ],
+            colors: ['#00a3d8', '#2fbbe8', '#72cae7', '#d9544f', '#ffc100', '#1693A5']
+          });
+          $('#browser-usage').find("path[stroke='#ffffff']").attr('stroke', 'rgba(0,0,0,0)');
+      
 
         function test_bi(act){
+            //console.log("//--------------------------------------------------");
+           // $("body").load("bi/bi_action.php?act="+act);
             $.getJSON("bi/bi_action.php?act="+act,function(r){
-                console.log("//--------------------------------------------------");
                 console.log(r);
                 $("#content").html(r);
             }); 
         }
 
+
+        $.getJSON("bi/bi_action.php?act=ratecode",function(r){
+            //alert(r);
+            
+              /*
+              {label: "WHSPC",value: 43942},{label: "OTARB",value: 40162},
+                {label: "WHA01",value: 19213},
+                {label: "FASTRB",value: 7931},
+                {label: "WHPR01",value: 7640},
+                {label: "OTALMRO",value: 6644},
+              */
+              Morris.Donut({
+                element: 'browser-usage',
+                data: [{label: "WHSPC",value: 43942},{label: "OTARB",value: 40162},
+                {label: "WHA01",value: 19213},
+                {label: "FASTRB",value: 7931},
+                {label: "WHPR01",value: 7640},
+                {label: "OTALMRO",value: 6644}],
+                colors: ['#00a3d8', '#2fbbe8', '#72cae7', '#d9544f', '#ffc100', '#1693A5']
+              });
+              $('#browser-usage').find("path[stroke='#ffffff']").attr('stroke', 'rgba(0,0,0,0)');
+        });
+
+
+
+        /*
         $.getJSON("bi/bi_action.php?act=linecompare",function(r){
         var plot = $.plotAnimator($("#statistics-chart"), 
                 [
@@ -101,7 +145,7 @@ print_r($connection_string);
                     }
                   });        
                   
-               }); 
+               }); */
         });
   </script> 
 <style type="text/css">
@@ -109,6 +153,7 @@ print_r($connection_string);
         background: #333;
     }
 </style>
+<DIV id='browser-usage'></div>
   <div id='content'>
       <div id="statistics-chart" class="chart statistics" style="height: 250px;">statistics-chart</div></div>
   </div>
